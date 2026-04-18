@@ -1,0 +1,58 @@
+# Автоматическая синхронизация с шаблонным репозиторием
+# При пуше в master шаблона - автоматически создаётся PR в форк студента
+name: Sync with Template
+
+on:
+  schedule:
+    # Каждый час проверяем обновления
+    - cron: '0 * * * *'
+  workflow_dispatch:  # Ручной запуск из Actions
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add template remote and fetch
+        run: |
+          git remote add template https://github.com/Python-Course-2026/python-course-2026-classroom-15-27-dict-classroom6.git || true
+          git fetch template master
+
+      - name: Check for updates
+        id: check
+        run: |
+          LOCAL=$(git rev-parse HEAD)
+          REMOTE=$(git rev-parse template/master)
+          if [ "$LOCAL" != "$REMOTE" ]; then
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create sync branch and PR
+        if: steps.check.outputs.has_updates == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: sync-template
+          title: '🔄 Sync: обновления из шаблона'
+          body: |
+            ## Автоматическая синхронизация с шаблоном
+
+            Обнаружены обновления в шаблонном репозитории.
+
+            ### Что делать:
+            1. Проверь изменения
+            2. Реши конфликты если есть
+            3. Смержи в `master`
+          delete-branch: true
