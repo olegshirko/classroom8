@@ -3,8 +3,11 @@
 """
 
 import requests
+import os
+from dotenv import load_dotenv
 
-API_KEY = "ключ"
+load_dotenv()
+API_KEY = os.getenv("DEEPSEEK_API_KEY")
 API_URL = "https://api.deepseek.com/chat/completions"
 MODEL = "deepseek-chat"
 HISTORY_LIMIT = 20  # сколько сообщений держим в контексте
