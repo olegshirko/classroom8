@@ -24,7 +24,7 @@ DEEPSEEK_API_KEY=sk-your_key_here
 
 ### 3. Запуск
 
-**Скелет (студент)** — файл с TODO.
+**Скелет приложения ** — файл с TODO.
 
 ```bash
 python3 chat_skeleton.py
