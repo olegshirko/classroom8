@@ -13,9 +13,12 @@
 """
 
 import requests
+import os
+from dotenv import load_dotenv
 
 # --- Настройки ---
-API_KEY = "ВСТАВЬ_СВОЙ_КЛЮЧ_СЮДА"
+load_dotenv()
+API_KEY = os.getenv("DEEPSEEK_API_KEY")
 API_URL = "https://api.deepseek.com/chat/completions"
 MODEL = "deepseek-chat"
 
