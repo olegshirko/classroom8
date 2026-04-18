@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyc.*
+
+# IDE
+.idea/
+.vscode/
+
+# venv
+.venv/
+venv/
+
+# pytest
+.pytest_cache/
+
+# output
+chat_log.txt
